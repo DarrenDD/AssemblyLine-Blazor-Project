@@ -8,34 +8,31 @@ namespace AssemblyLine_Blazor.Data
     public class OperationService : IOperationService
     {
         
-        public List<Operation> Operations { get; set; } = new List<Operation>();
-        public List<Device> Device { get; set ; } = new List<Device>();
+        
+        public List<Device> Device { get; set ; } = new List<Device>()        
+        {
+            new Device
+            {
+                Id = Guid.NewGuid(),
+                Name = "Barcode Scanner",
+                DeviceType = DeviceType.BarcodeScanner
+            },
+            new Device
+            {
+                Id = Guid.NewGuid(),
+                Name = "Printer",
+                DeviceType = DeviceType.Printer
+            }
+        };
 
-        //public List<Device> Devices = new List<Device>()
-        //{
-        //    new Device
-        //    {
-        //        Id = Guid.NewGuid(),
-        //        Name = "Barcode Scanner",
-        //        DeviceType = DeviceType.BarcodeScanner
-        //    },
-        //    new Device
-        //    {
-        //        Id = Guid.NewGuid(),
-        //        Name = "Printer",
-        //        DeviceType = DeviceType.Printer
-        //    }
-        //};        
-
-
-        //private readonly List<Operation> operations = new List<Operation>
+        public List<Operation> Operations { get; set; } = new List<Operation>();     
         //{
         //    new Operation()
         //    {
         //        Id = Guid.NewGuid(),
         //        Name = "TEST 1",
         //        OrderInWhichToPerform = 1,
-        //        //DeviceId = 
+                
 
 
         //    },
