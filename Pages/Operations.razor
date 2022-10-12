@@ -1,0 +1,52 @@
+﻿@page "/operations"
+@inject AssemblyLine_Blazor.Data.IOperationService OperationService
+
+<h1>Operations</h1>
+<br />
+
+<a href="operation/0">Add New Operation</a>
+<table class="table">
+    <thead>
+        <tr>
+            <td>Id</td>
+            <td>Name</td>
+            <td>OrderInWhichToPerform</td>
+            <td>ImageData</td>
+            <td>Device</td>
+            <td></td>
+            <td></td>
+        </tr>
+    </thead>
+    <tbody class="align-items-center">
+        @foreach (var operation in OperationService.Operations)
+        {
+            <tr>
+                <td>@operation.Id</td>
+                <td>@operation.Name</td>
+                <td>@operation.OrderInWhichToPerform</td>
+                <td>@operation.ImageData</td>
+                <td>@operation.Device.Name</td>
+                <td>
+                    <a href="operation/@operation.Id">Edit</a>
+                </td>
+                <td>
+                    <button class="btn btn-danger" @onclick="@(e=> OnDelete(operation.Id))">Delete</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@code {
+
+
+    protected override void OnInitialized()
+    {
+        OperationService.ListOperations();
+    }
+
+    private void OnDelete(Guid id)
+    {
+        OperationService.DeleteOperation(id); 
+    }
+
+}

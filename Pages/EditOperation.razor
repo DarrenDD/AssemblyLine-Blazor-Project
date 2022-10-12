@@ -1,0 +1,95 @@
+﻿@page "/operation/{id}"
+@inject AssemblyLine_Blazor.Data.IOperationService OperationService
+@inject AssemblyLine_Blazor.Data.IDeviceService DeviceService
+@inject NavigationManager Navigation
+
+
+<h3>EditOperation</h3>
+
+<EditForm Model="operation" OnSubmit="@SubmitForm">
+    <div class="list-group col-6">
+        <label>Id</label>
+        <input id="id" class="form-control" name="id" value="@operation.Id" readonly />
+    </div>
+    <div class="list-group col-8">
+        <label>Name</label>
+        <InputText id="name" class="form-control" DisplayName="name" @bind-Value="operation.Name"></InputText>
+    </div>
+    <div class="list-group col-8">
+        <DataAnnotationsValidator/>
+        
+        <label>Order In Which To Perform</label>
+        <InputNumber id="orderInWhichToPerform" class="form-control" DisplayName="orderinwhichtoperform" @bind-Value="operation.OrderInWhichToPerform"></InputNumber>
+        
+    </div>
+    <div class="list-group align-content-md-center col-8">
+        <label>Image</label>        
+        <InputFile id="imageData" class="form-control" DisplayName="imageData" @bind-Value="operation.ImageData" ></InputFile>
+
+    </div>
+    <div class="form-group col-8">
+        <ValidationSummary />
+        <label for="device">Device</label>
+        <InputSelect DisplayName="Device" @bind-Value="operation.DeviceId" class="form-control">
+            <option value="0" selected>Please Select a Device</option>
+            @foreach(var item in OperationService.Device)
+            {
+                <option value="@item.Id">@item.Name</option>
+            }
+        </InputSelect>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Update</button>
+</EditForm>
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+
+    Operation operation = new Operation { Device = new Device() };
+
+    protected override void OnInitialized()
+    {
+        if (!string.IsNullOrEmpty(Id) & Id == "0")
+        {
+            operation = new Data.Operation();
+            operation.Device = OperationService.Device[0];
+            operation.DeviceId = operation.Device.Id;
+        }
+        else
+        {
+            operation = OperationService.GetOperation(Guid.Parse(Id));
+        }
+
+    }
+    //protected override void OnParametersSet()
+    //{
+    //    if (Id == null){
+    //        operation.Device = OperationService.Device[0];
+    //        operation.DeviceId = operation.Device.Id;
+    //    }
+        
+    //}
+
+    private void HandleValidSubmit()
+    {
+        Console.WriteLine("OnValidSubmit");
+    }
+
+    private void SubmitForm()
+    {
+        if (operation.Id == Guid.Empty)
+        {
+            OperationService.AddOperation(operation);
+
+        }
+        else
+        {
+            OperationService.UpdateOperation(operation);
+        }
+
+        Navigation.NavigateTo("operations");
+    }
+
+    
+}

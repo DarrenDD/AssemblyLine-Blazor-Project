@@ -1,0 +1,44 @@
+﻿@page "/devices"
+@inject AssemblyLine_Blazor.Data.IOperationService OperationService;
+<h1>Devices</h1>
+<br />
+
+<a href="device/0">Add New Device</a>
+<table class="table">
+    <thead>
+        <tr>
+            <td>Id</td>
+            <td>Name</td>
+            <td>Device Type</td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var device in devices)
+        {
+            <tr>
+                <td>@device.Id</td>
+                <td>@device.Name</td>
+                <td>@device.DeviceType</td>
+                <td>
+                    <a href="device/@device.Id">Edit</a>
+                </td>
+                <td>
+                    <button class="btn btn-danger" @onclick="@(e=> OnDelete(device.Id))">Delete</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    private List<AssemblyLine_Blazor.Data.Device> devices;
+
+    protected override void OnInitialized()
+    {
+        devices = OperationService.ListDevices();
+    }
+    private void OnDelete(Guid id)
+    {
+        OperationService.DeleteDevice(id);
+    }
+}
